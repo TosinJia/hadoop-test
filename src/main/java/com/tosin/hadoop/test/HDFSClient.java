@@ -4,6 +4,9 @@ import org.apache.hadoop.conf.Configuration;
 import org.apache.hadoop.fs.FileSystem;
 import org.apache.hadoop.fs.Path;
 
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
 import java.io.IOException;
 import java.net.URI;
 import java.net.URISyntaxException;
@@ -11,8 +14,26 @@ import java.net.URISyntaxException;
 
 public class HDFSClient {
     public static void main(String[] args) throws Exception {
-        testCopyFromLocalFile();
+//        testCopyFromLocalFile();
+        practice191011();
     }
+
+    public static void practice191011() throws IOException, URISyntaxException, InterruptedException {
+        //生成文件
+        String filePathName = "E:\\temp\\BIGDATA.txt";
+        FileOutputStream fileOutputStream = new FileOutputStream(new File(filePathName));
+        fileOutputStream.write("I LOVE BIGDATA!".getBytes());
+        fileOutputStream.close();
+
+        //上传文件到HDFS中
+        Configuration conf = new Configuration();
+
+        FileSystem fileSystem = FileSystem.get(new URI("hdfs://bd-01-01:9000"), conf, "root");
+        fileSystem.copyFromLocalFile(true, new Path(filePathName), new Path("/BIGDATA.txt"));
+        fileSystem.close();
+        System.out.println("上传成功");
+    }
+
 
     public static void testCopyFromLocalFile() throws IOException {
         //1. 创建配置信息对象
