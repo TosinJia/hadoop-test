@@ -15,7 +15,7 @@ import java.net.URISyntaxException;
 public class HDFSClient {
     public static void main(String[] args) throws Exception {
 //        testCopyFromLocalFile();
-        practice191011();
+//        practice191011();
     }
 
     public static void practice191011() throws IOException, URISyntaxException, InterruptedException {
