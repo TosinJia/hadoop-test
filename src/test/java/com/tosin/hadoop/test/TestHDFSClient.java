@@ -14,7 +14,7 @@ import java.net.URISyntaxException;
 /**
  * @auther: TosinJia
  * @date: 2019/10/11 14:52
- * @description:
+ * @description: 通过API操作HDFS
  */
 public class TestHDFSClient {
     private static FileSystem fileSystem;
@@ -43,6 +43,7 @@ public class TestHDFSClient {
      */
     @Test
     public void listStatus() throws IOException {
+        //指定目录下子文件、子文件夹
         FileStatus[] fileStatuses = fileSystem.listStatus(new Path("/"));
         for(FileStatus fileStatus: fileStatuses){
             String fileName = fileStatus.getPath().getName();
@@ -63,11 +64,12 @@ public class TestHDFSClient {
         while (remoteIterator.hasNext()){
             LocatedFileStatus fileStatus = remoteIterator.next();
             String fileName = fileStatus.getPath().getName();
+            String parentPath = fileStatus.getPath().getParent().toUri().toString();
             long blockSize = fileStatus.getBlockSize();
             FsPermission permission = fileStatus.getPermission();
             long len = fileStatus.getLen();
             StringBuffer info = new StringBuffer();
-            info.append("文件名：" + fileName).append("\r\n");
+            info.append("文件名：" + fileName+"\t"+parentPath).append("\r\n");
             info.append("\t"+(fileStatus.isFile()?"文件":"目录")).append("\r\n");
             info.append("\t块大小：" + blockSize).append("\r\n");
             info.append("\t权限：" + permission).append("\r\n");
@@ -91,7 +93,7 @@ public class TestHDFSClient {
      */
     @Test
     public void rename() throws IOException {
-        fileSystem.rename(new Path("hdfs://bd-01-01:9000/log4j.properties"), new Path("hdfs://bd-01-01:9000/log4j-newname.properties"));
+        fileSystem.rename(new Path("/log4j.properties"), new Path("/log4j-rename.properties"));
     }
     /**
      * 删除文件、文件夹 rm
@@ -101,7 +103,7 @@ public class TestHDFSClient {
     public void delete() throws IOException {
         //Path var1   : HDFS地址
         //boolean var2 : 是否递归删除
-        fileSystem.delete(new Path("hdfs://bd-01-01:9000/tosin"), true);
+        fileSystem.delete(new Path("/tosin/study"), true);
     }
     /**
      * 创建目录 mkdir
@@ -109,7 +111,8 @@ public class TestHDFSClient {
      */
     @Test
     public void mkdirs() throws IOException {
-        fileSystem.mkdirs(new Path("hdfs://bd-01-01:9000/tosin/study"));
+        //创建多级目录
+        fileSystem.mkdirs(new Path("hdfs://bd-01-01:9000/tosin/study/191011"));
     }
 
     /**
@@ -122,7 +125,7 @@ public class TestHDFSClient {
         //Path src ：要下载的路径
         //Path dst ：要下载到哪
         //boolean useRawLocalFileSystem ：是否校验文件
-        fileSystem.copyToLocalFile(false, new Path(""), new Path(""), true);
+        fileSystem.copyToLocalFile(false, new Path("/log4j-191011.properties"), new Path("E:\\temp\\log4j-191011-1.properties"), true);
     }
 
 
@@ -137,7 +140,7 @@ public class TestHDFSClient {
         //4. 本地文件路径
         Path src = new Path("E:\\log4j.properties");
         //5. 目标HDFS路径
-        Path dst = new Path("hdfs://bd-01-01:9000/log4j.properties");
+        Path dst = new Path("hdfs://bd-01-01:9000/log4j-191011.properties");
         //6. 以拷贝方式上传
         fileSystem.copyFromLocalFile(src, dst);
     }
