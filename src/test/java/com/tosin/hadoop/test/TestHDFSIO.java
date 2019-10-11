@@ -31,16 +31,16 @@ public class TestHDFSIO {
         //2. 获取文件系统
         FileSystem fileSystem = FileSystem.get(new URI("hdfs://bd-01-01:9000"), conf, "root");
         //3. 创建输入流
-        FileInputStream fileInputStream = new FileInputStream(new File("E:\\"));
+        FileInputStream fileInputStream = new FileInputStream(new File("E:\\temp\\hadoop-2.8.5.tar.gz"));
         //4. 创建输出流
-        FSDataOutputStream fsDataOutputStream = fileSystem.create(new Path("/"));
+        FSDataOutputStream fsDataOutputStream = fileSystem.create(new Path("/tosin/hadoop-2.8.5.tar.gz"));
         //5. 流对接
         try {
             //InputStream in    输入
             //OutputStream out  输出
             //int buffSize      缓冲区
             //boolean close     是否关闭流
-            IOUtils.copyBytes(fileInputStream, fsDataOutputStream, 1024, false);
+            IOUtils.copyBytes(fileInputStream, fsDataOutputStream, 4*1024, false);
         } catch (IOException e) {
             e.printStackTrace();
         } finally {
@@ -58,7 +58,7 @@ public class TestHDFSIO {
         Configuration conf = new Configuration();
         FileSystem fileSystem = FileSystem.get(new URI("hdfs://bd-01-01:9000"), conf, "root");
         // 打开输入流
-        FSDataInputStream fsDataInputStream = fileSystem.open(new Path("/"));
+        FSDataInputStream fsDataInputStream = fileSystem.open(new Path("/log4j-191011.properties"));
         //输出到控制台
         IOUtils.copyBytes(fsDataInputStream, System.out, 4*1024, true);
     }
@@ -73,11 +73,11 @@ public class TestHDFSIO {
     @Test
     public void readFlieSeek1() throws URISyntaxException, IOException, InterruptedException {
         Configuration conf = new Configuration();
-        FileSystem fileSystem = FileSystem.get(new URI(""), conf, "root");
+        FileSystem fileSystem = FileSystem.get(new URI("hdfs://bd-01-01:9000"), conf, "root");
         //打开输入流
-        FSDataInputStream fsDataInputStream = fileSystem.open(new Path("/"));
+        FSDataInputStream fsDataInputStream = fileSystem.open(new Path("/tosin/hadoop-2.8.5.tar.gz"));
         //创建文件输出流
-        FileOutputStream fileOutputStream = new FileOutputStream("F:\\");
+        FileOutputStream fileOutputStream = new FileOutputStream("E:\\temp\\hadoop-2.8.5-synthesis-1");
 
         //流对接
         byte[] buf = new byte[1024];
@@ -94,8 +94,8 @@ public class TestHDFSIO {
      * 2. IO读取第二块数据
      * 3. 合并文件
      * cmd
-     *      type B1>>B2
-     * 后缀修改为rar
+     *      E:\temp>type hadoop-2.8.5-synthesis-2 >> hadoop-2.8.5-synthesis-1
+     * 修改后缀
      * @throws URISyntaxException
      * @throws IOException
      * @throws InterruptedException
@@ -103,9 +103,9 @@ public class TestHDFSIO {
     @Test
     public void readFlieSeek2() throws URISyntaxException, IOException, InterruptedException {
         Configuration conf = new Configuration();
-        FileSystem fileSystem = FileSystem.get(new URI(""), conf, "root");
-        FSDataInputStream fsDataInputStream = fileSystem.open(new Path("/"));
-        FileOutputStream fileOutputStream = new FileOutputStream("F:\\");
+        FileSystem fileSystem = FileSystem.get(new URI("hdfs://bd-01-01:9000"), conf, "root");
+        FSDataInputStream fsDataInputStream = fileSystem.open(new Path("/tosin/hadoop-2.8.5.tar.gz"));
+        FileOutputStream fileOutputStream = new FileOutputStream("E:\\temp\\hadoop-2.8.5-synthesis-2");
 
         // 定位偏移量/offset/游标/读取进度 (目的：找到第一块的尾巴，第二块的开头)
         fsDataInputStream.seek(128*1024*1024);
