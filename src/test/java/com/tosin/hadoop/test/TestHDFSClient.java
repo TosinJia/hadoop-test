@@ -1,4 +1,4 @@
-package com.tosin.hadoop;
+package com.tosin.hadoop.test;
 
 import org.apache.hadoop.conf.Configuration;
 import org.apache.hadoop.fs.*;
@@ -16,7 +16,7 @@ import java.net.URISyntaxException;
  * @date: 2019/10/11 14:52
  * @description:
  */
-public class HDFSClient {
+public class TestHDFSClient {
     private static FileSystem fileSystem;
     @Before
     public void initFileSystem() throws Exception {
@@ -133,7 +133,7 @@ public class HDFSClient {
      * @throws Exception
      */
     @Test
-    public static void copyFromLocalFile1() throws Exception {
+    public void copyFromLocalFile1() throws Exception {
         //4. 本地文件路径
         Path src = new Path("E:\\log4j.properties");
         //5. 目标HDFS路径
