@@ -8,10 +8,7 @@ import org.apache.hadoop.fs.Path;
 import org.apache.hadoop.io.IOUtils;
 import org.junit.Test;
 
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileOutputStream;
-import java.io.IOException;
+import java.io.*;
 import java.net.URI;
 import java.net.URISyntaxException;
 
@@ -49,6 +46,53 @@ public class TestHDFSIO {
             System.out.println("upload success");
         }
     }
+
+    /***
+     * 一致性模型
+     */
+    @Test
+    public void writeHDFSFile() throws URISyntaxException, IOException, InterruptedException {
+        Configuration conf = new Configuration();
+        FileSystem fileSystem = FileSystem.get(new URI("hdfs://bd-01-01:9000"), conf, "tosin");
+        FSDataOutputStream fsDataOutputStream = fileSystem.create(new Path("/hdfs-consistency.txt"));
+        // 文件已创建
+        // 写入数据
+        fsDataOutputStream.write("hello hdfs.".getBytes());
+        // 数据未写入
+        // 一致性刷新
+        fsDataOutputStream.hflush();
+        // 数据已写入
+        fsDataOutputStream.close();
+    }
+
+    /**
+     * JAVA SE 一致性模型
+     * @throws IOException
+     */
+    @Test
+    public void writeFile() throws IOException {
+        FileOutputStream fileOutputStream = new FileOutputStream(new File("E:\\temp\\consistency.txt"));
+        // 文件已创建
+        fileOutputStream.write("hello consistency".getBytes());
+        // 数据已写入
+        fileOutputStream.flush();
+        fileOutputStream.close();
+    }
+    @Test
+    public void dfsWriteFile() throws Exception {
+        Configuration conf = new Configuration();
+        FileSystem fileSystem = FileSystem.get(conf);
+        FSDataOutputStream fsDataOutputStream = fileSystem.create(new Path("E:\\temp\\consistency.txt"));
+        // consistency.txt consistency.txt.crc文件已创建
+        fsDataOutputStream.write("hello consistency".getBytes());
+        // 数据未写入
+        fsDataOutputStream.hflush();
+//        fsDataOutputStream.flush();
+        // 数据未写入
+        fsDataOutputStream.close();
+        // 数据已写入
+    }
+
 
     /**
      * HDFS文件下载
@@ -115,4 +159,6 @@ public class TestHDFSIO {
         IOUtils.closeStream(fileOutputStream);
         IOUtils.closeStream(fsDataInputStream);
     }
+
+
 }
