@@ -10,8 +10,13 @@ import org.apache.hadoop.mapreduce.lib.output.FileOutputFormat;
 
 import java.io.IOException;
 
+/**
+ * 需求1：统计一堆文件中单词出现的次数
+ * */
 public class WordCountDriver {
     public static void main(String[] args) throws IOException, ClassNotFoundException, InterruptedException {
+//        args = new String[]{"E:\\temp\\wordcount\\in\\", "E:\\temp\\wordcount\\out-01"};
+
         // 1 创建配置，获取Job实例
         Configuration conf = new Configuration();
         Job job = Job.getInstance(conf);
@@ -27,9 +32,9 @@ public class WordCountDriver {
         job.setOutputKeyClass(Text.class);
         job.setOutputValueClass(IntWritable.class);
         // 6 设置原数据文件存放路径，结果数据输出目录
-        FileInputFormat.setInputPaths(job, new Path("E:\\temp\\wordcount\\in\\info.txt"));
+        FileInputFormat.setInputPaths(job, new Path(args[0]));
         //  Exception in thread "main" org.apache.hadoop.mapred.FileAlreadyExistsException: Output directory file:/E:/temp/wordcount/out already exists
-        FileOutputFormat.setOutputPath(job, new Path("E:\\temp\\wordcount\\out-01"));
+        FileOutputFormat.setOutputPath(job, new Path(args[1]));
         // 7 job提交
         boolean result = job.waitForCompletion(true);
         System.out.println(result);
