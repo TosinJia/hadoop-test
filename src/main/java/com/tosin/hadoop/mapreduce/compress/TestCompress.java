@@ -11,11 +11,14 @@ import java.io.*;
 
 public class TestCompress {
     public static void main(String[] args) throws IOException, ClassNotFoundException {
-//        compress("E:\\temp\\log4j.properties", "org.apache.hadoop.io.compress.BZip2Codec");
+//        compress("E:\\temp\\log4j.properties", "org.apache.hadoop.io.compress.DefaultCodec");
 //        compress("E:\\temp\\log4j.properties", "org.apache.hadoop.io.compress.GzipCodec");
+//        compress("E:\\temp\\log4j.properties", "org.apache.hadoop.io.compress.BZip2Codec");
+        //this version of libhadoop was built without snappy support.
+//        compress("E:\\temp\\log4j.properties", "org.apache.hadoop.io.compress.SnappyCodec");
 
 //        decompress("E:\\temp\\log4j.properties.gz", ".txt");
-        decompress("E:\\temp\\log4j.properties.bz2", ".txt");
+//        decompress("E:\\temp\\log4j.properties.bz2", ".txt");
     }
 
     /**
