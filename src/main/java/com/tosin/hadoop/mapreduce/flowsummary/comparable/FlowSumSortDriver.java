@@ -11,6 +11,7 @@ import java.io.IOException;
 
 /**
  * 需求3：将统计结果按照总流量倒序排序（全排序）
+ * map阶段输出key为FlowBean，即使用FlowBean排序功能
  */
 public class FlowSumSortDriver {
     public static void main(String[] args) throws IOException, ClassNotFoundException, InterruptedException {

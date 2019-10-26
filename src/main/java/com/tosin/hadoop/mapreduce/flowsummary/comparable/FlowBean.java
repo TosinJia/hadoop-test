@@ -15,7 +15,7 @@ import java.io.IOException;
 @NoArgsConstructor
 public class FlowBean implements WritableComparable<FlowBean> {
     public int compareTo(FlowBean o) {
-        //倒序排列?
+        //倒序排列 理解:下标 越小越靠前
         return this.sumFlow > o.getSumFlow()?-1:1;
     }
     public void set(long upFlow, long downFlow){
