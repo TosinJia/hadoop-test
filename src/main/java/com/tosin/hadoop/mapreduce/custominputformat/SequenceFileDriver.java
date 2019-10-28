@@ -8,6 +8,7 @@ import org.apache.hadoop.io.Text;
 import org.apache.hadoop.mapreduce.Job;
 import org.apache.hadoop.mapreduce.lib.input.FileInputFormat;
 import org.apache.hadoop.mapreduce.lib.output.FileOutputFormat;
+import org.apache.hadoop.mapreduce.lib.output.SequenceFileOutputFormat;
 
 import java.io.IOException;
 
@@ -31,13 +32,12 @@ public class SequenceFileDriver {
 
         // 设置自定义输入格式类
         job.setInputFormatClass(WholeFileInputFormat.class);
-        // 设置自定义输出格式类
-//        job.setOutputFormatClass(SequenceFileOutputFormat.class);
+        // 设置自定义输出格式类 SequenceFileOutputFormat hadoop自带二进制输出形式
+        job.setOutputFormatClass(SequenceFileOutputFormat.class);
         FileInputFormat.setInputPaths(job, new Path(args[0]));
         FileOutputFormat.setOutputPath(job, new Path(args[1]));
 
         boolean result = job.waitForCompletion(true);
         System.out.println(result);
-
     }
 }

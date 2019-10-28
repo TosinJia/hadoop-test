@@ -21,8 +21,8 @@ public class FilterRecordWriter extends RecordWriter<Text, NullWritable> {
             fileSystem = FileSystem.get(job.getConfiguration());
 
             // 2 创建输出文件路径
-            Path path = new Path("e:/itstar.log");
-            Path otherPath = new Path("e:/other.log");
+            Path path = new Path("E:\\temp\\customoutputformat\\google.log");
+            Path otherPath = new Path("E:\\temp\\customoutputformat\\other.log");
             // 3 创建输出流
             fsDataOutputStream = fileSystem.create(path);
             otherFsDataOutputStream = fileSystem.create(otherPath);
@@ -32,7 +32,7 @@ public class FilterRecordWriter extends RecordWriter<Text, NullWritable> {
     }
     @Override
     public void write(Text key, NullWritable value) throws IOException, InterruptedException {
-        if (key.toString().contains("itstar")) {
+        if (key.toString().contains("google")) {
             fsDataOutputStream.write(key.toString().getBytes());
         }else{
             otherFsDataOutputStream.write(key.toString().getBytes());
