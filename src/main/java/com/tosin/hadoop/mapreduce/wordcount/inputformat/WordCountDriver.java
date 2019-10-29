@@ -39,8 +39,8 @@ public class WordCountDriver {
          * n个小文件之和不能小于2048，n+1个小文件之和不能大于4096
          */
         job.setInputFormatClass(CombineTextInputFormat.class);
-        CombineTextInputFormat.setMinInputSplitSize(job, 2048);
-        CombineTextInputFormat.setMaxInputSplitSize(job, 4096);
+        CombineTextInputFormat.setMinInputSplitSize(job, 2097152); //2M
+        CombineTextInputFormat.setMaxInputSplitSize(job, 4194304); //4M
         // 7 job提交
         boolean result = job.waitForCompletion(true);
         System.out.println(result);
